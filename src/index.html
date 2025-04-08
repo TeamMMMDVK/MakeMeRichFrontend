@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Get Stock Info</title>
+  <link rel="stylesheet" href="css/styles.css">
+
+</head>
+<body>
+<div class="container">
+  <h1>Get Stock Info</h1>
+
+  <label for="stock-select">Choose a stock:</label>
+  <select id="stock-select">
+    <option value="AAPL">Apple (AAPL)</option>
+    <option value="GOOGL">Google (GOOGL)</option>
+    <option value="MSFT">Microsoft (MSFT)</option>
+    <option value="TSLA">Tesla (TSLA)</option>
+  </select>
+
+  <label for="question">Your question about the selected stock:</label>
+  <input type="text" id="question" placeholder="e.g., What is the forecast for the next quarter?"/>
+
+  <button id="submit-btn">Submit</button>
+
+  <label>Response:</label>
+  <div class="response-box" id="response-box">
+    <!-- Response will appear here -->
+  </div>
+</div>
+
+<script src="js/admin.js"></script>
+</body>
+</html>
