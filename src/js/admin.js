@@ -1,10 +1,22 @@
-let symbol = document.getElementById("stock-select")
 let question = document.getElementById("question")
+let symbol = document.getElementById("stock-select").value;
 let responseBox = document.getElementById("response-box")
+document.getElementById("stock-select").addEventListener("change", (event) => {
+    symbol = event.target.value
+})
+
 
 const url = "http://localhost:8080/chat/ai"
+const urlTwelveApi = "http://localhost:8080/twelveapi?symbol="
 
-document.getElementById("submit-btn").addEventListener("click",sendPrompt)
+
+
+document.getElementById("submit-btn").addEventListener("click", async () => {
+    sendPrompt()
+    getPriceData(symbol)
+    chart(symbol);
+});
+
 
 
 async function sendPrompt() {
@@ -12,8 +24,9 @@ async function sendPrompt() {
 
     let requestBody = {
         prompt: question.value,
-        symbol: symbol.value
+        symbol: symbol
     };
+
 
     const objectAsJsonString = JSON.stringify(requestBody); //stringify konverterer vores objekt til en JSON-streng
 
@@ -42,3 +55,61 @@ async function sendPrompt() {
 }
 
 
+ async function getPriceData(symbol) {
+     const url = urlTwelveApi + symbol
+     const response = await fetch(url);
+     const data = await response.json();
+     JSON.stringify(data)
+     return data;
+ }
+
+async function chart(symbol) {
+    const stockData = await getPriceData(symbol);
+    console.log("stockdata", stockData)
+    const mappedData = stockData.values
+    console.log("mapped", stockData.meta.symbol)
+
+    if (window.stockChartInstance) {
+        window.stockChartInstance.destroy();
+    }
+
+    const ctx = document.getElementById('stockChart').getContext('2d');
+    const candlestickData = mappedData.map(item => ({
+        c: parseFloat(item.close),
+        h: parseFloat(item.high),
+        l: parseFloat(item.low),
+        o: parseFloat(item.open),
+        x: new Date(item.datetime).getTime()
+    })).reverse();
+
+
+    console.log(candlestickData)
+    window.stockChartInstance = new Chart(ctx, {
+        type: 'candlestick',
+        data: {
+            datasets: [{
+                label: stockData.meta.symbol,
+                data: candlestickData,
+                color: {
+                    up: '#26a69a',
+                    down: '#ef5350',
+                    unchanged: '#ccc'
+                }
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    type: 'time',
+                    time: {
+                        unit: 'day',
+                        tooltipFormat: 'P',
+                    }
+                },
+                y: {
+                    beginAtZero: false
+                }
+            }
+        }
+    });}
