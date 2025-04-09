@@ -4,8 +4,19 @@ let responseBox = document.getElementById("response-box")
 
 const url = "http://localhost:8080/chat/ai"
 
-document.getElementById("submit-btn").addEventListener("click",sendPrompt)
+document.getElementById("submit-btn").addEventListener("click", sendPrompt)
 
+async function getPriceObjectData(Ticker) {
+    let url = `http://localhost:8080/testlistobject?symbol=${Ticker}` //RequestParam
+    try {
+        const response = await fetch(url)
+        const data = await response.json(); // Jeg er et array [ ]
+        //console.log(data)
+    } catch (Error) {
+        console.error("Something went wrong", Error)
+    }
+
+}
 
 async function sendPrompt() {
     console.log("Her er vi i sendPrompt metoden")
@@ -14,6 +25,7 @@ async function sendPrompt() {
         prompt: question.value,
         symbol: symbol.value
     };
+    getPriceObjectData(symbol.value)
 
     const objectAsJsonString = JSON.stringify(requestBody); //stringify konverterer vores objekt til en JSON-streng
 
