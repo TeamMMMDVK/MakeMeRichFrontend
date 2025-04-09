@@ -6,6 +6,8 @@
   <title>Get Stock Info</title>
   <link rel="stylesheet" href="css/styles.css">
 
+
+
 </head>
 <body>
 <div class="container">
@@ -49,11 +51,18 @@
   <div class="response-box" id="response-box">
     <!-- Response will appear here -->
   </div>
+
+  <h3>Stock Buying prices</h3>
+  <canvas id="stockChart" width="800" height="400"></canvas>
+
   <p>Remember eventhough I'm quite clever, investing money is a game! <br>
     Sometimes you win and sometimes you lose.<br>
     I am not responsible for what happens based on my recommendations.</p>
 </div>
 
 <script src="js/admin.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-chart-financial"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
 </body>
 </html>
