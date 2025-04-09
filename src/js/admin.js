@@ -12,7 +12,7 @@ const urlTwelveApi = "http://localhost:8080/twelveapi?symbol="
 
 
 document.getElementById("submit-btn").addEventListener("click", async () => {
-    //sendPrompt()
+    sendPrompt()
     getPriceData(symbol)
     chart(symbol);
 });
