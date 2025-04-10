@@ -41,7 +41,7 @@ async function sendPrompt() {
     };
 
     try {
-        spinner.style.display = "block"
+        spinner.style.display = "block" // Vis spinner mens der hentes data
         const response = await fetch(url, fetchOptions);
 
         if (!response.ok) {
@@ -55,7 +55,7 @@ async function sendPrompt() {
         responseBox.innerText = "Ups! Noget gik galt.";
     }
     finally {
-        spinner.style.display = "none"
+        spinner.style.display = "none" // Skjul spinner igen, når data er klar
     }
 }
 
