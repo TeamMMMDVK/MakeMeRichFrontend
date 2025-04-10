@@ -7,7 +7,6 @@ document.getElementById("stock-select").addEventListener("change", (event) => {
 
 
 const url = "http://localhost:8080/chat/ai"
-const urlTwelveApi = "http://localhost:8080/twelveapi?symbol="
 
 
 
@@ -25,7 +24,6 @@ async function getPriceObjectData(Ticker) {
         const response = await fetch(url)
         const data = await response.json(); // Jeg er et array [ ]
         return data;
-        //console.log(data)
     } catch (Error) {
         console.error("Something went wrong", Error)
     }
@@ -39,7 +37,6 @@ async function sendPrompt() {
         prompt: question.value,
         symbol: symbol
     };
-    //getPriceObjectData(symbol.value)
 
     const objectAsJsonString = JSON.stringify(requestBody); //stringify konverterer vores objekt til en JSON-streng
 
@@ -67,36 +64,15 @@ async function sendPrompt() {
     }
 }
 
-
- async function getPriceData(symbol) {
-     const url = urlTwelveApi + symbol
-     const response = await fetch(url);
-     const data = await response.json();
-     JSON.stringify(data)
-     return data;
- }
-
 async function chart(symbol) {
-    //const stockData = await getPriceData(symbol);
     const stockData = await getPriceObjectData(symbol)
-    console.log("stockdata", stockData)
-    //const mappedData = stockData.values
-    //console.log("mapped", stockData.meta.symbol)
 
     if (window.stockChartInstance) {
         window.stockChartInstance.destroy();
     }
 
     const ctx = document.getElementById('stockChart').getContext('2d');
-    /*
-    const candlestickData = mappedData.map(item => ({
-        c: parseFloat(item.close),
-        h: parseFloat(item.high),
-        l: parseFloat(item.low),
-        o: parseFloat(item.open),
-        x: new Date(item.datetime).getTime()
-    })).reverse();
-     */
+
     const candlestickData = stockData.map(item => ({
         c: parseFloat(item.close),
         h: parseFloat(item.high),
@@ -106,7 +82,6 @@ async function chart(symbol) {
     })).reverse();
 
 
-    //console.log(candlestickData)
     window.stockChartInstance = new Chart(ctx, {
         type: 'candlestick',
         data: {
