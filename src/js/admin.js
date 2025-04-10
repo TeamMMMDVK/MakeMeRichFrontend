@@ -7,17 +7,28 @@ document.getElementById("stock-select").addEventListener("change", (event) => {
 
 
 const url = "http://localhost:8080/chat/ai"
-const urlTwelveApi = "http://localhost:8080/twelveapi?symbol="
 
 
 
 document.getElementById("submit-btn").addEventListener("click", async () => {
     sendPrompt()
-    getPriceData(symbol)
+    //getPriceData(symbol)
+    getPriceObjectData(symbol)
     chart(symbol);
 });
 
 
+async function getPriceObjectData(Ticker) {
+    let url = `http://localhost:8080/testlistobject?symbol=${Ticker}` //RequestParam
+    try {
+        const response = await fetch(url)
+        const data = await response.json(); // Jeg er et array [ ]
+        return data;
+    } catch (Error) {
+        console.error("Something went wrong", Error)
+    }
+
+}
 
 async function sendPrompt() {
     console.log("Her er vi i sendPrompt metoden")
@@ -26,7 +37,6 @@ async function sendPrompt() {
         prompt: question.value,
         symbol: symbol
     };
-
 
     const objectAsJsonString = JSON.stringify(requestBody); //stringify konverterer vores objekt til en JSON-streng
 
@@ -54,27 +64,16 @@ async function sendPrompt() {
     }
 }
 
-
- async function getPriceData(symbol) {
-     const url = urlTwelveApi + symbol
-     const response = await fetch(url);
-     const data = await response.json();
-     JSON.stringify(data)
-     return data;
- }
-
 async function chart(symbol) {
-    const stockData = await getPriceData(symbol);
-    console.log("stockdata", stockData)
-    const mappedData = stockData.values
-    console.log("mapped", stockData.meta.symbol)
+    const stockData = await getPriceObjectData(symbol)
 
     if (window.stockChartInstance) {
         window.stockChartInstance.destroy();
     }
 
     const ctx = document.getElementById('stockChart').getContext('2d');
-    const candlestickData = mappedData.map(item => ({
+
+    const candlestickData = stockData.map(item => ({
         c: parseFloat(item.close),
         h: parseFloat(item.high),
         l: parseFloat(item.low),
@@ -83,12 +82,12 @@ async function chart(symbol) {
     })).reverse();
 
 
-    console.log(candlestickData)
     window.stockChartInstance = new Chart(ctx, {
         type: 'candlestick',
         data: {
             datasets: [{
-                label: stockData.meta.symbol,
+                //label: stockData.meta.symbol,
+                label: symbol ,
                 data: candlestickData,
                 color: {
                     up: '#26a69a',
