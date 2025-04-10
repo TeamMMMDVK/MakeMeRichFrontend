@@ -50,6 +50,22 @@ button:hover {
     background-color: #0056b3;
 }
 
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);  /* tynd gennemsigtig grå kant rundt om spinneren */
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border-left-color: #4caf50; /* farver kun venstre side af kanten, dette er med til at skabe illusionen af at noget roterer, men det er egentligt figuren som roterer */
+    animation: spin 1s linear infinite; /* navnet på animationen, se længere nede, 1 sek for hver animation, linear vil sige samme hastighed og infinite vil sige hele tiden */
+    display: none; /* skjult som default */
+    margin-left: 1em;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+
 .response-box {
     background-color: #f1f1f1;
     padding: 1rem;
