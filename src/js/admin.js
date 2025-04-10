@@ -1,6 +1,7 @@
 let question = document.getElementById("question")
 let symbol = document.getElementById("stock-select").value;
 let responseBox = document.getElementById("response-box")
+const spinner = document.getElementById("spinner")
 document.getElementById("stock-select").addEventListener("change", (event) => {
     symbol = event.target.value
 })
@@ -50,6 +51,7 @@ async function sendPrompt() {
     };
 
     try {
+        spinner.style.display = "block" // Vis spinner mens der hentes data
         const response = await fetch(url, fetchOptions);
 
         if (!response.ok) {
@@ -61,6 +63,9 @@ async function sendPrompt() {
     } catch (error) {
         console.error("Fejl ved forespørgsel:", error);
         responseBox.innerText = "Ups! Noget gik galt.";
+    }
+    finally {
+        spinner.style.display = "none" // Skjul spinner igen, når data er klar
     }
 }
 
